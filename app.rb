@@ -1,8 +1,7 @@
 # encoding: utf-8
 require "sinatra"
-require "json"
-require "httparty"
 require "dotenv"
+require "net/http"
 
 configure do
   # Load .env vars
@@ -11,25 +10,11 @@ configure do
   $stdout.sync = true
 end
 
-post "/notify/:token" do
-  if params[:token] == ENV["APP_TOKEN"]
-    payload = {
-      :type => "note",
-      :title => "#{params[:app]} deployed to Heroku",
-      :body => "#{params[:user]} deployed version #{params[:head]} of #{params[:app]}"
-    }
-    auth = {
-      :username => ENV["PUSHBULLET_TOKEN"],
-      :password => ""
-    }
-    HTTParty.post("https://api.pushbullet.com/v2/pushes",
-                  :basic_auth => auth,
-                  :body => payload.to_json,
-                  :headers => { "Content-Type" => "application/json" })
-    status 200
-    body "ok"
-  else
-    status 403
-    body "nope"
-  end
+post "/yo/:username" do
+  Net::HTTP.post_form(URI.parse("http://api.justyo.co/yo/"),
+                      { "api_token" => ENV["API_TOKEN"],
+                        "username" => params[:username],
+                        "link" => "https://dashboard.heroku.com/apps/#{params[:app]}" })
+  status 200
+  body "ok"
 end
