@@ -1,0 +1,16 @@
+{
+  "name": "Heroku Yo",
+  "description": "Send Heroku deploy YOs",
+  "keywords": [
+    "heroku",
+    "yo"
+  ],
+  "repository": "https://github.com/gesteves/heroku-yo",
+  "success_url": "https://github.com/gesteves/heroku-yo",
+  "env": {
+    "API_TOKEN": {
+      "description": "Yo API token. Get it at http://dev.justyo.co/",
+      "required": true
+    }
+  }
+}
